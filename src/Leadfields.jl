@@ -13,7 +13,9 @@ const fontwhite = "\x1b[37m"
 # for the moment being, only one leadfield file is supported
 const leadfield_path = joinpath(abspath(@__DIR__, ".."), "leadfields", "fsavLEADFIELD_4_GEDAI.mat")
 
-export head_model
+export  head_model,
+        head_model_
+
 
 include("leadfield.jl")
 
