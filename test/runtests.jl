@@ -1,16 +1,13 @@
-using Test
-
-include("leadfield.jl")
+using Leadfields, Test
 
 @testset "head_model function tests" begin
-    file = "fsavLEADFIELD_4_GEDAI.mat"
 
     # Base head_model_ behavior to compare against
-    K_, ename_, eloc_, gridloc_ = head_model_(file)
+    K_, ename_, eloc_, gridloc_ = head_model_()
     ename_lower_ = lowercase.(ename_)
 
     @testset "1. No labels, reference = 0.0 (default)" begin
-        K1, ename1, eloc1, gridloc1 = head_model(file)
+        K1, ename1, eloc1, gridloc1 = head_model()
 
         # Check output sizes and identities
         @test size(K1) == size(K_)
@@ -25,7 +22,7 @@ include("leadfield.jl")
 
     @testset "2. labels provided, reference = 0.0" begin
         labels2 = ["FP1", "FP2", "C3", "C4"]
-        K2, ename2, eloc2, gridloc2 = head_model(file, labels2)
+        K2, ename2, eloc2, gridloc2 = head_model(labels2)
 
         @test length(ename2) == 4
         @test lowercase.(ename2) == lowercase.(labels2)
@@ -41,7 +38,7 @@ include("leadfield.jl")
     @testset "3. No labels, string reference" begin
         # Assume "Cz" exists in the mat file
         ref_label3 = "Cz"
-        K3, ename3, eloc3, gridloc3 = head_model(file, reference=ref_label3)
+        K3, ename3, eloc3, gridloc3 = head_model(; reference=ref_label3)
 
         cz_idx = findfirst(==(lowercase(ref_label3)), ename_lower_)
 
@@ -61,7 +58,7 @@ include("leadfield.jl")
     @testset "4. labels provided, string reference IN labels" begin
         labels4 = ["Fz", "Cz", "Pz"]
         ref_label4 = "Cz"
-        K4, ename4, eloc4, gridloc4 = head_model(file, labels4, reference=ref_label4)
+        K4, ename4, eloc4, gridloc4 = head_model(labels4; reference=ref_label4)
 
         @test length(ename4) == 2
         @test !(ref_label4 in ename4)
@@ -83,7 +80,7 @@ include("leadfield.jl")
         labels5 = ["FP1", "FP2"]
         ref_label5 = "Cz"
 
-        K5, ename5, eloc5, gridloc5 = head_model(file, labels5, reference=ref_label5)
+        K5, ename5, eloc5, gridloc5 = head_model(labels5; reference=ref_label5)
 
         @test length(ename5) == 2
         @test lowercase.(ename5) == lowercase.(labels5)
@@ -103,7 +100,7 @@ include("leadfield.jl")
     end
 
     @testset "6. Invalid label or reference" begin
-        @test_throws ErrorException head_model(file, ["InvalidLabel123"])
-        @test_throws ErrorException head_model(file, reference="InvalidRef123")
+        @test_throws ErrorException head_model(["InvalidLabel123"])
+        @test_throws ErrorException head_model(; reference="InvalidRef123")
     end
 end;

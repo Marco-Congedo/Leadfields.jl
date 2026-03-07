@@ -8,7 +8,9 @@
 # 2) electrode labels: 343-vector of strings
 # 3) electrode locations: 343-vector of 3-vectors
 # 4) voxel locations: 1210-vector of 3-vectors
-function head_model_(file)
+function head_model_()
+
+    file = leadfield_path
 
     # read main dictionary
     d = matread(file)["leadfield4GEDAI"]
@@ -66,9 +68,10 @@ end
 #   thus if `reference` = 0.0, it is referenced to the (rank-deficient) common average reference,
 #   and if `reference` = 1.0, it referenced to the full-rank pseudo common average reference.
 #   See the Eegle.car! function for explanations.
-function head_model(labels::Union{Vector{String},Nothing}=nothing; reference::Real=0.0)
-    file = leadfield_path
-    K, ename, eloc, gridloc = head_model_(file)
+function head_model(labels::Union{Vector{String}, Nothing}=nothing; 
+                    reference::Union{String, Real}=0.0)
+
+    K, ename, eloc, gridloc = head_model_()
     ename_lower = lowercase.(ename)
 
     if labels !== nothing
