@@ -13,7 +13,7 @@
 
 This package allows to manipulate EEG **leadfield matrices** in [julia](https://julialang.org/). 
 
-It provides a leadfield computed through the [BrainStorm](https://neuroimage.usc.edu/brainstorm/Introduction) software by [OpenMEEG](https://openmeeg.github.io/) using the ‘fsaverage’ adult head model (FreeSurfer’s default template based on 40 normative brains). The computation of the leadfield is based on the Boundary Element Method (BEM), with 3630 unconstrained brain dipolar sources (**1210 voxels** × 3 cartesian orientations) and **343 standard EEG electrode leads** (10-5 system).
+It provides a **leadfield matrix** computed through the [BrainStorm](https://neuroimage.usc.edu/brainstorm/Introduction) software by [OpenMEEG](https://openmeeg.github.io/) using the ‘fsaverage’ adult head model (FreeSurfer’s default template based on 40 normative brains). The computation of the leadfield is based on the Boundary Element Method (BEM), with 3630 unconstrained brain dipolar sources (**1210 voxels** × 3 cartesian orientations) and **343 standard EEG electrode leads** (10-5 system).
 
 The leadfield can be used for computing vector-type EEG inverse solutions using [Xloreta](https://github.com/Marco-Congedo/Xloreta.jl) and for advanced use of the [Gedai](https://github.com/Marco-Congedo/Gedai) denoising algorithm.
 
