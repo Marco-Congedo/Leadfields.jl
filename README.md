@@ -11,8 +11,9 @@
 
 # Leadfields
 
-This packege allow access to a leadfield computed by the [OpenMEEG](https://openmeeg.github.io/) software in [julia](https://julialang.org/) for
-**1210 voxels** and up to **343 electrodes**.
+This package allows to manipulate EEG **leadfield matrices** in [julia](https://julialang.org/). 
+
+It provides a leadfield computed through the [BrainStorm](https://neuroimage.usc.edu/brainstorm/Introduction) software by [OpenMEEG](https://openmeeg.github.io/) using the ‘fsaverage’ adult head model (FreeSurfer’s default template based on 40 normative brains). The computation of the leadfield is based on the Boundary Element Method (BEM), with 3630 unconstrained brain dipolar sources (**1210 voxels** × 3 cartesian orientations) and **343 standard EEG electrode leads** (10-5 system).
 
 The leadfield can be used for computing vector-type EEG inverse solutions using [Xloreta](https://github.com/Marco-Congedo/Xloreta.jl) and for advanced use of the [Gedai](https://github.com/Marco-Congedo/Gedai) denoising algorithm.
 
@@ -61,7 +62,7 @@ Using the problem statement, notation and nomenclature defined there, this packa
 - the electrode locations in 3D cartesian coordinates
 - the voxel locations in 3D cartesian coordinates.
 
-The voxel locations is always fixed. The leadfield can be computed for any collection of electrodes and with any electrical reference.
+The vector of voxel locations is always fixed. The leadfield, instead, can be computed for any collection of electrodes and with any electrical reference.
 
 > [!WARNING] 
 > Each label in the sought collection of electrodes must match one of the strings listed in the [sensors343.txt](https://github.com/Marco-Congedo/Gedai/tree/master/Documents/sensors343.txt) file (in a case-insensitive fashion).
@@ -73,7 +74,7 @@ The voxel locations is always fixed. The leadfield can be computed for any colle
 
 ## 🔌 API
 
-The package exports only one function, but a very general one:
+The package exports only one function, but a general one:
 
 ```julia
 function leadfield(labels=nothing; reference=0.0)
@@ -84,7 +85,7 @@ function leadfield(labels=nothing; reference=0.0)
 - `labels`: a vector of strings holding the electrode labels.
 
 **Keyword Argument**
-- `reference`: a reference electrode label as a string or a correction factor as a real number for computing the common average reference (CAR).
+- `reference`: a reference electrode label as a string, or a correction factor as a real number for computing the common average reference (CAR).
 
 Both arguments are optional.
 
@@ -142,11 +143,8 @@ K, ename, eloc, gridloc = leadfield(labels)
 
 **Example for use with GEDAI denoising**
 
-We will compute the leadfield matrix for the left Mastoid
-file = selectDB(:MI)[16].files[1]
-o = readNY(file)
-K, ename, eloc, gridloc = leadfield(o.sensors; reference = "M1")
-K, ename, eloc, gridloc = leadfield(reference = "M1")
+See the last [example](https://github.com/Marco-Congedo/Gedai/tree/master?tab=readme-ov-file#-examples)
+in the documentation of **Gedai.jl**.
 
 
 [▲ index](#-index)
