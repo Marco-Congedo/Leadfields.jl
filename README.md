@@ -17,7 +17,7 @@ It provides a **leadfield matrix** computed through the [BrainStorm](https://neu
 
 The leadfield can be used for computing vector-type EEG inverse solutions using [Xloreta](https://github.com/Marco-Congedo/Xloreta.jl) and for advanced use of the [Gedai](https://github.com/Marco-Congedo/Gedai) denoising algorithm.
 
-The specifications of the leadfield can be found in the "fsavLEADFIELD_4_GEDAI.pdf" file in the "leadfields" directory of this repository.
+The specifications of the leadfield can be found [here](https://github.com/Marco-Congedo/Gedai/blob/master/Documents/fsavLEADFIELD.pdf).
 
 ![separator](Documents/separator.png)
 
@@ -65,7 +65,7 @@ Using the problem statement, notation and nomenclature defined there, this packa
 The vector of voxel locations is always fixed. The leadfield, instead, can be computed for any collection of electrodes and with any electrical reference.
 
 > [!WARNING] 
-> Each label in the sought collection of electrodes must match one of the strings listed in the [sensors343.txt](https://github.com/Marco-Congedo/Gedai/tree/master/Documents/sensors343.txt) file (in a case-insensitive fashion).
+> Each label in the sought collection of electrodes must match one of the strings in this [list](https://github.com/Marco-Congedo/Gedai/blob/master/Documents/sensors343.txt) (in a case-insensitive fashion).
 
 
 [▲ index](#-index)
@@ -143,8 +143,7 @@ K, ename, eloc, gridloc = leadfield(labels)
 
 **Example for use with GEDAI denoising**
 
-See the last [example](https://github.com/Marco-Congedo/Gedai/tree/master?tab=readme-ov-file#-examples)
-in the documentation of **Gedai.jl**.
+See the last example [here](https://github.com/Marco-Congedo/Gedai/tree/master?tab=readme-ov-file#-examples).
 
 
 [▲ index](#-index)
