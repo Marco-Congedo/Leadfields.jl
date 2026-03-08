@@ -61,10 +61,10 @@ Using the problem statement, notation and nomenclature defined there, this packa
 - the electrode locations in 3D cartesian coordinates
 - the voxel locations in 3D cartesian coordinates.
 
-The voxel locations is always fixed. The leadfield can be computed for any collection of electrodes and with any reference.
+The voxel locations is always fixed. The leadfield can be computed for any collection of electrodes and with any electrical reference.
 
 > [!WARNING] 
-> Each label in the sought collection of electrodes must match (in a case-insensitive fashion) one of the strings listed in the [sensors343.txt](https://github.com/Marco-Congedo/Gedai/tree/master/Documents/sensors343.txt) file.
+> Each label in the sought collection of electrodes must match one of the strings listed in the [sensors343.txt](https://github.com/Marco-Congedo/Gedai/tree/master/Documents/sensors343.txt) file (in a case-insensitive fashion).
 
 
 [▲ index](#-index)
@@ -98,9 +98,9 @@ the 4-tuple comprising:
 
 In the output tuple, d) (the voxel locations) is always the same.
 
-By default (`labels=nothing` and `reference=0.0`) n = 343, i.e., this function computes the leadfield matrix in the common average reference (rank-deficient, with rank n-1) at all available electrodes and returns the associated electrode labels and locations.
+By default `labels=nothing` and `reference=0.0`, thus n = 343, i.e., the function computes the leadfield matrix in the common average reference (rank-deficient, with rank n-1) for all available electrodes and returns the associated electrode labels and locations.
 
-If `labels` is a vector of strings, n = length(labels) and (a, b, c) contains only the elements corresponding to the provided labels.
+If `labels` is a vector of strings, n = length(labels) and (a, b, c) contain only the elements corresponding to the provided labels.
 
 Furthermore,
 
@@ -113,7 +113,7 @@ Furthermore,
     - 1.2.b: `reference` is not in labels:
         n = length(labels)
 
-2) If `reference` is a real value the leadfield matrix is re-referenced to the (common average reference + `reference`), thus if `reference` = 0.0 (default), it is referenced to the (rank-deficient) common average reference, and if `reference` = 1.0, it referenced to the full-rank pseudo common average reference used by default in [Gedai](https://github.com/Marco-Congedo/Gedai) denoising algorithm.
+2) If `reference` is a real value the leadfield matrix is re-referenced to the (common average reference + `reference`), thus if `reference` = 0.0 (default), it is referenced to the (rank-deficient) common average reference, and if `reference` = 1.0, it referenced to the full-rank pseudo common average reference used by default in the [Gedai](https://github.com/Marco-Congedo/Gedai) denoising algorithm.
 See the [Eegle.car!](https://marco-congedo.github.io/Eegle.jl/stable/Processing/#Eegle.Processing.car!) function for explanations
 on the common average reference.
 

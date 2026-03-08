@@ -1,6 +1,6 @@
 name = "Leadfields"
 uuid = "d0ef5c8d-53fe-4948-8f80-436d4b7c1491"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Marco Congedo <marco.congedo@gmail.com>"]
 
 [deps]
