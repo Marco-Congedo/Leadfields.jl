@@ -1,16 +1,23 @@
-# The complete description of the file "fsavLEADFIELD_4_GEDAI.mat"
-# is in file "fsavLEADFIELD.pdf"
+# The complete description of how to generate headmodel files and other files generated 
+# using the Brainstorm software is in file "Documents\Brainstorm_Directions.pdf".
+# Brainstorm generates .mat files, which are found:
+# - in the "HeadModels" folder (e.g., "headmodel_2503.mat")
+# - in the "Sensors" Folder (only "channel_ASA_10-05_343.mat")
+# - in the "Meshes" Folder (e.g., "tess_cortex_pial_low_2503.mat")
+# For the "headmodel_1210.mat" only, a summary of the content is provided in file "headmodel_1210.pdf".
+# This headmodel has been generated differently from the others and the .mat file has a different dictionary.
+# It is used only by Gedai.jl as it has a low spatial resolution (voxel of 1cm³)
 
 
-# Read into a .mat `file` a leadfield for EEG inverse solutions.
+# Read into the leadfield_1210.mat file the leadfield for EEG inverse solutions EXCLUSIVELY USED for Gedai.jl.
 # Return four arguments:
 # 1) leadfield matrix: 343 electrodes x 1210 (voxels) x3(orientations) (3630) 
 # 2) electrode labels: 343-vector of strings
 # 3) electrode locations: 343-vector of 3-vectors
 # 4) voxel locations: 1210-vector of 3-vectors
-function leadfield_()
+function leadfield_1210_()
 
-    file = leadfield_path
+    file = leadfield_1210_path
 
     # read main dictionary
     d = matread(file)["leadfield4GEDAI"]
@@ -34,16 +41,71 @@ function leadfield_()
 
 end
 
-# Compute the computational elements of an head model for EEG inverse solutions
-# from the provided file "fsavLEADFIELD_4_GEDAI.mat".
+
+# Read into the leadfield_XXX.mat file the leadfield for EEG inverse solutions.
+# These files are produced by BrainStorm
+# following the procedure described in the document "Documents\BrainStorm_Directions"
+# It takes as arguments `voxels`, an integer identifying the head model file to be used.
+# Each head model is constructed for the given integer number of voxels.
+# Return the 4-tuple comprising:
+#1) leadfield matrix K: 343 electrodes x (`voxels` x 3 orientations) 
+#2) electrode labels: 343-vector of strings
+#3) electrode locations: 343-vector of 3-vectors (x, y, z)
+#4) voxel locations: `voxels`-vector of 3-vectors (x, y, z)
+#
+# Supported `voxels` integer: 
+# - 2503 (default)
+# - 5002
+function leadfield_(voxels::Int = 2503)
+
+    if voxels===2503
+        headmodel_path = leadfield_2503_path
+    elseif voxels===5002
+        headmodel_path = leadfield_5002_path
+    end
+
+    hm   = matread(headmodel_path) # "headmodel_XXX.mat"
+    sensor = matread(sensors_path) # "channel_ASA_10-05_343.mat" 
+
+    # print(keys(sensor)) #["Comment", "TransfEeg", "HeadPoints", "MegRefCoef", "Projector", "TransfEegLabels", "IntraElectrodes", "TransfMeg", "History", "SCS", "Channel", "TransfMegLabels", "Clusters"]
+    # println(keys(hm)) #["Comment", "Param", "HeadModelType", "MEGMethod", "SurfaceFile", "GridAtlas", "SEEGMethod", "History", "GridOptions", "EEGMethod", "ECOGMethod", "Gain", "NIRSMethod", "GridOrient", "GridLoc", "FemMeshFile"]
+    
+    # test if the keys in files exist
+
+    haskey(sensor, "Channel")|| throw(ArgumentError("Channel keys not found in sensorsfile"))
+    haskey(hm, "Gain")|| throw(ArgumentError("Gain keys not found in headmodelfile"))
+    haskey(hm, "GridLoc")|| throw(ArgumentError("Gridloc keys not found in headmodelfile"))
+
+    e = sensor["Channel"]
+    ne = size(sensor["Channel"]["Name"], 2) # number of electrodes
+
+    eloc_ = reshape(float.(e["Loc"]), ne) # electrode coordinates
+    eloc = [reshape(v, 3) for v in eloc_] # ne-vector of 3-vectors (electrode 3D locations)
+    ename = reshape(string.(e["Name"]),length(eloc)) # ne-Vector of electrode name as strings
+
+    K = Float64.(hm["Gain"])      # ne × nvx3  Leadfield Matrix    
+    # npzwrite("K.npz", Dict("K" => K)) # if you want to get K
+
+    gridloc = [Vector(r) for r in eachrow(Float64.(hm["GridLoc"]))] # nv-vector of 3-vectors of voxel coordinates
+
+    return K, ename, eloc, gridloc
+end
+
+
+
+# Compute the computational elements of an head model for EEG inverse solutions and GEDAI
+# from a stored headmodel .mat file produced by Brainstorm software
 # It takes as arguments:
 # 1) labels: vector of electrode labels (optional)
 # 2) reference: reference electrode label (optional)
+# It takes as optional keyword argument:
+# 1) `voxels`, an integer identifying a model by its number of voxels. By default is 2503,
+#   which uses the 2503-voxel model. It can be also 1210 or 5002.
 # Return the 4-tuple comprising:
-# a) leadfield matrix: Ne(electrodes) x [1210(voxels) x 3(orientations)] 
+# a) leadfield matrix: Ne(electrodes) x [`voxels` x 3(orientations)] 
 # b) electrode labels: a Ne-vector of strings
 # c) electrode locations: a Ne-vector of 3-vectors holding each the location in 3D cartesian coordinates
-# d) voxel locations: a 1210-vector of 3-vectors holding each the location in 3D cartesian coordinates.
+# d) voxel locations: a `voxels`-vector of 3-vectors holding each the location in 3D cartesian coordinates.
 
 # In the output tuple, d) (voxel locations) is always the same.
 # By default (`labels`=nothing and `reference =0.0`) Ne = 343, i.e., this function computes 
@@ -63,15 +125,28 @@ end
 #       Ne = length(labels)-1, since the elements of (a, b, c) corresponding to that electrode are removed.
 #	1.2.b: `reference` is not in labels:
 #       Ne = length(labels)
-# 2) If `reference` is a real value (default 0.0)
+# 2) If `reference` is a real value different from the default (0.0)
 #   the leadfield matrix is re-referenced to the (common average reference + `reference`),
 #   thus if `reference` = 0.0, it is referenced to the (rank-deficient) common average reference,
 #   and if `reference` = 1.0, it referenced to the full-rank pseudo common average reference.
 #   See the Eegle.car! function for explanations.
 function leadfield(labels::Union{Vector{String}, Nothing}=nothing; 
-                    reference::Union{String, Real}=0.0)
+                    reference::Union{String, Real}=0.0,
+                    voxels::Int = 2503)
 
-    K, ename, eloc, gridloc = leadfield_()
+    K = nothing
+    ename = nothing
+    eloc = nothing
+    gridloc = nothing
+
+    voxels in (1210, 2503, 5002) || throw(ArgumentError("The `voxels` keyword argument can be 1210, 2503 or 5002"))
+
+    if voxels===1210
+        K, ename, eloc, gridloc = leadfield_1210_() # special call only for this model
+    else
+        K, ename, eloc, gridloc = leadfield_(voxels) # any other model
+    end
+
     ename_lower = lowercase.(ename)
 
     if labels !== nothing
@@ -161,5 +236,10 @@ end
 
 
 # Example usage
-# K, ename, eloc, gridloc = leadfield()
+# K, ename, eloc, gridloc = leadfield() # use the 2503-voxel model (default)
+# K, ename, eloc, gridloc = leadfield(; headmodel=5002) # use the 5002-voxel model
+
+# use the 2503-voxel model and  get the head model for a given set of electrodes (average-reference)
 # K, ename, eloc, gridloc = leadfield(["FP1", "FP2", "F3", "F4", "C3", "C4", "P3", "P4", "O1", "O2"])
+
+
