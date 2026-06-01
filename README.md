@@ -21,17 +21,18 @@ This package works under the hook as a preparatory step for other packages:
 
 The **leadfield matrices** provided by this package have been pre-computed via the [BrainStorm](https://neuroimage.usc.edu/brainstorm/Introduction) software by [OpenMEEG](https://openmeeg.github.io/) using the ‘fsaverage’ adult head model (FreeSurfer’s default template based on 40 normative brains). The computation of the leadfields is based on the Boundary Element Method (BEM).
 
-#
-> [!TIP] All supported leadfields are accessible for any subset of the **343 standard EEG electrode leads** listed 
+> [!TIP] 
+> All supported leadfields are accessible for any subset of the **343 standard EEG electrode leads** listed 
 > [here](https://github.com/Marco-Congedo/Leadfields.jl/blob/master/Documents/sensors343.txt).
 
 The available leadfields correspond to  
- 1) 3630 unconstrained brain dipolar sources (**1210 voxels** × 3 cartesian orientations): voxel size: 10mm
- 2) 7509 unconstrained brain dipolar sources (**2503 voxels** × 3 cartesian orientations); voxel size: 4.3mm
- 2) 15006 unconstrained brain dipolar sources (**5002 voxels** × 3 cartesian orientations); voxel size: 3mm
+1) 3630 unconstrained brain dipolar sources (**1210 voxels** × 3 cartesian orientations): voxel size: 10mm
+2) 7509 unconstrained brain dipolar sources (**2503 voxels** × 3 cartesian orientations); voxel size: 4.3mm
+3) 15006 unconstrained brain dipolar sources (**5002 voxels** × 3 cartesian orientations); voxel size: 3mm
 
-#
-> [!WARNING] For the first model, no corresponding .stl file can be computed. This model is reserved for advanced use of the 
+
+> [!WARNING] 
+> For the first model, no corresponding .stl file can be computed. This model is reserved for advanced use of the 
 > [Gedai](https://github.com/Marco-Congedo/Gedai) denoising algorithm. The specifications of this model can be found 
 > [here](https://github.com/Marco-Congedo/Leadfields.jl/blob/master/HeadModels/headmodel_1210.pdf).
 
