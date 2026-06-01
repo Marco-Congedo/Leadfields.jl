@@ -3,7 +3,7 @@ using Leadfields, Test
 @testset "leadfield function tests" begin
 
     # Base leadfield_ behavior to compare against
-    K_, ename_, eloc_, gridloc_ = leadfield_()
+    K_, ename_, eloc_, gridloc_ = leadfield_(voxels=2503)
     ename_lower_ = lowercase.(ename_)
 
     @testset "1. No labels, reference = 0.0 (default)" begin
