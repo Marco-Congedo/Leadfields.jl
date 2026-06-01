@@ -12,23 +12,26 @@
 # Leadfields
 
 This package allows to load and manipulate EEG **leadfield matrices** in [julia](https://julialang.org/)
-and to generate the corresponding .stl files for plotting the cortex using Makie.jl.
+and to generate the corresponding *.stl* files for plotting the cortex using Makie.jl.
 
-This package is preparatory for 
-- [Xloreta.jl](https://github.com/Marco-Congedo/Xloreta.jl): computes inverse solution tranformation matrices
-- CortexPlot.jl: Visualize inverse solution functional data on top of cructural (cortex) data
-- [Gedai.jl](https://github.com/Marco-Congedo/Gedai): EEG artifact rejection using leadfield matrices.
+This package works under the hook as a preparatory step for other packages: 
+- [Xloreta.jl](https://github.com/Marco-Congedo/Xloreta.jl): computes inverse solution tranformation matrices using the leadfields matrices generated here
+- CortexPlot.jl: Visualize inverse solution functional data on top of structural (cortex) data. Both depends on the leadfield generated here.
+- [Gedai.jl](https://github.com/Marco-Congedo/Gedai): EEG artifact rejection using a leadfield matrix generated here.
 
-This package provides a number of **leadfield matrices** that have been pre-computed via the [BrainStorm](https://neuroimage.usc.edu/brainstorm/Introduction) software by [OpenMEEG](https://openmeeg.github.io/) using the ‘fsaverage’ adult head model (FreeSurfer’s default template based on 40 normative brains). The computation of the leadfield is based on the Boundary Element Method (BEM).
+The **leadfield matrices** provided by this package have been pre-computed via the [BrainStorm](https://neuroimage.usc.edu/brainstorm/Introduction) software by [OpenMEEG](https://openmeeg.github.io/) using the ‘fsaverage’ adult head model (FreeSurfer’s default template based on 40 normative brains). The computation of the leadfields is based on the Boundary Element Method (BEM).
 
-> [!TIP] All supported leadfields are accessible for any subset of the **343 standard EEG electrode leads** listed [here](https:// github.com/Marco-Congedo/Leadfields.jl/blob/master/Documents/sensors343.txt).
+> [!TIP] All supported leadfields are accessible for any subset of the **343 standard EEG electrode leads** listed 
+> [here](https://github.com/Marco-Congedo/Leadfields.jl/blob/master/Documents/sensors343.txt).
 
-The available leadfields corresponds to  
+The available leadfields correspond to  
  1) 3630 unconstrained brain dipolar sources (**1210 voxels** × 3 cartesian orientations): voxel size: 10mm
  2) 7509 unconstrained brain dipolar sources (**2503 voxels** × 3 cartesian orientations); voxel size: 4.3mm
  2) 15006 unconstrained brain dipolar sources (**5002 voxels** × 3 cartesian orientations); voxel size: 3mm
 
-> [!WARNING] For the first model, no corresponding .stl file can be computed. This model is reserved for advanced use of the [Gedai](https://github.com/Marco-Congedo/Gedai) denoising algorithm. The specifications of this model can be found [here](https://github.com/Marco-Congedo/Leadfields.jl/blob/master/Leadfields/headmodel_1210.pdf).
+> [!WARNING] For the first model, no corresponding .stl file can be computed. This model is reserved for advanced use of the 
+> [Gedai](https://github.com/Marco-Congedo/Gedai) denoising algorithm. The specifications of this model can be found 
+> [here](https://github.com/Marco-Congedo/Leadfields.jl/blob/master/HeadModels/headmodel_1210.pdf).
 
 > [!TIP] 
 > FOR DEVELOPERS: The directions for generating other head models are [here](https://github.com/Marco-Congedo/Leadfields.jl/tree/master/Documents/BrainStorm_Directions.pdf).
@@ -54,7 +57,7 @@ Execute the following command in julia's REPL:
 
 ```julia
 using Pkg
-Pkg.add("https://github.com/Marco-Congedo/Leadfields.jl")
+Pkg.add(Leadfields)
 ```
 
 To test the package:
@@ -197,7 +200,7 @@ gen_cortex_stl(joinpath(homedir(), "cortex_5002.stl"); voxels = 5002)
 
 ## ✍️ About the Author
 
-[Marco Congedo](https://github.com/Marco-Congedo), Arthur Tatlian and [Tomas Ros](https://github.com/neurotuning-personal).
+[Marco Congedo](https://github.com/Marco-Congedo), Arthur Tatlian, Esteban Padilla and [Tomas Ros](https://github.com/neurotuning-personal).
 
 [▲ index](#-index)
 
