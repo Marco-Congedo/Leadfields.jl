@@ -27,7 +27,7 @@ The **leadfield matrices** provided by this package have been pre-computed via t
 
 The available leadfields correspond to  
 1) 3630 unconstrained brain dipolar sources (**1210 voxels** × 3 cartesian orientations): voxel size: 10mm
-2) 7509 unconstrained brain dipolar sources (**2503 voxels** × 3 cartesian orientations); voxel size: 4.3mm
+2) 7509 unconstrained brain dipolar sources (**2503 voxels** × 3 cartesian orientations); voxel size: 4.8mm
 3) 15006 unconstrained brain dipolar sources (**5002 voxels** × 3 cartesian orientations); voxel size: 3mm
 
 
